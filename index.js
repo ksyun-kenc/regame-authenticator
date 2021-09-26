@@ -18,13 +18,26 @@ const jayson = require('jayson')
 
 const server = jayson.server({
   verify: function (args, callback) {
-    if (args.type === 'code') {
-      callback(null, true)
-    } else if (args.type === 'sm3') {
-      callback(null, true)
-    } else {
-      callback({code: 404, message: 'Invalid type!'})
+    if (args.version !== 0) {
+      callback({code: 1, message: 'Unsupported version!'})
+      return
     }
+    if (args.type === 0) {
+      if (args.username === 'UMU' && args.data === '123456') {
+        callback(null, true)
+        console.log(args)
+        return
+      }
+    } else if (args.type === 1) {
+      if (args.username === 'UMU' && args.data === '207cf410532f92a47dee245ce9b11ff71f578ebd763eb3bbea44ebd043d018fb') {
+        callback(null, true)
+        return
+      }
+    } else {
+      callback({code: 2, message: 'Invalid type!'})
+    }
+
+    callback({code: 3, message: 'Failed!'})
   }
 })
 
